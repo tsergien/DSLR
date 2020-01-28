@@ -19,7 +19,7 @@ if __name__ == "__main__":
         print(df.describe())
 
         num_df = df.select_dtypes(include=['int', 'float64'])       
-        index_list = ['count', 'mean', 'std', 'min', '25%', '50%', '75%', 'max']
+        index_list = ['count', 'mean', 'std', 'min', '25%', '50%', '75%', 'max', 'unique']
         describe_df = pd.DataFrame(0, index=index_list, columns=list(num_df.columns.values)) 
         
         describe_df.loc['count',:] = num_df.shape[0] * np.ones(len(describe_df.loc['count',:])) - num_df.isna().sum()
@@ -28,6 +28,7 @@ if __name__ == "__main__":
         describe_df.loc['std',:] = np.sqrt(np.divide(squared_sum, describe_df.loc['count',:]) )
         describe_df.loc['min',:] = num_df.min(axis=0, skipna=True)
         describe_df.loc['max',:] = num_df.max(axis=0, skipna=True)
+        # describe_df.loc['unique',:] = num_df.value_counts()
 
         rank25 = (np.round(.25 * (describe_df.loc['count',:]+1 ))).astype(int)
         rank50 = (np.round(.5 * (describe_df.loc['count',:]+1 ))).astype(int)
