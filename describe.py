@@ -1,17 +1,13 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import sys
 import pandas as pd
 import math
 import numpy as np
 
-from tabulate import tabulate
-
-
-
 
 if __name__ == "__main__":
-    if (len(sys.argv) < 1):
+    if (len(sys.argv) < 2):
         print("Program need file with data. Please, pass it as argument.")
     else:
         df = pd.read_csv(sys.argv[1], sep=",")
