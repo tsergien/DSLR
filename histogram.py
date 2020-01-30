@@ -12,10 +12,12 @@ if __name__ == "__main__":
     else:
         df = pd.read_csv(sys.argv[1], sep=",")
 
-        cols_list = ['Arithmancy', 'Astronomy', 'Herbology',
+        cols_list = ['Hogwarts House', 'Arithmancy', 'Astronomy', 'Herbology',
        'Defense Against the Dark Arts', 'Divination', 'Muggle Studies',
        'Ancient Runes', 'History of Magic', 'Transfiguration', 'Potions',
        'Care of Magical Creatures', 'Charms', 'Flying']
+        houses_names = ['Gryffindor', 'Ravenclaw', 'Slytherin', 'Hufflepuff']
+        houses_colors = {'Gryffindor':'r', 'Ravenclaw':'b', 'Slytherin':'g', 'Hufflepuff':'y'}
 
         num_df = df[cols_list]
         
@@ -26,13 +28,24 @@ if __name__ == "__main__":
         fig.suptitle('Scores distributions between all houses')
         
         for i in range(len(cols_list)):
-            col = num_df.columns[i]
-            axs[i % rows_amount][i % columns_amount].hist(num_df.loc[:,col], bins=30, alpha=0.5, color='b')
-            axs[i % rows_amount][i % columns_amount].set_title(col)
-        fig.delaxes(axs[rows_amount-1][columns_amount-1])
+            for house in houses_names:
+                house_df = num_df.loc[num_df['Hogwarts House'] == house]
+                col = house_df.columns[i]
+                axs[i % rows_amount][i % columns_amount].hist(house_df.loc[:,col], \
+                    bins=30, alpha=0.3, color=houses_colors[house])
+                axs[i % rows_amount][i % columns_amount].set_title(col)
 
         for ax in axs.flat:
             ax.label_outer()
         plt.show()
 
 
+        answer = ['Care of Magical Creatures', 'Arithmancy']
+        for i in range(2):
+            for house in houses_names:
+                house_df = num_df.loc[num_df['Hogwarts House'] == house]
+                col = answer[i]
+                plt.hist(house_df.loc[:,col], \
+                    bins=30, alpha=0.3, color=houses_colors[house])
+            plt.title(col)
+            plt.show()
