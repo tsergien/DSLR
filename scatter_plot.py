@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import sys
 
-# Which Hogwarts course has a homogeneous score distribution between all four houses
+# What are the two features that are similar ?
 
 if __name__ == "__main__":
     if (len(sys.argv) < 2):
@@ -21,18 +21,21 @@ if __name__ == "__main__":
         
         rows_amount = 2
         columns_amount = 7
-        fig, axs = plt.subplots(rows_amount, columns_amount, figsize=(20, 10))
-        fig.subplots_adjust(wspace=0.3, hspace=0.3)
-        fig.suptitle('Scores distributions between all houses')
+        plots_amount  = len(cols_list)
+        fig, axs = plt.subplots(plots_amount, plots_amount, figsize=(25, 15))
+        fig.subplots_adjust(wspace=0.2, hspace=0.2)
+        fig.suptitle('Scatter plots ')
         
         for i in range(len(cols_list)):
-            col = num_df.columns[i]
-            axs[i % rows_amount][i % columns_amount].hist(num_df.loc[:,col], bins=30, alpha=0.5, color='b')
-            axs[i % rows_amount][i % columns_amount].set_title(col)
-        fig.delaxes(axs[rows_amount-1][columns_amount-1])
+            for j in range(len(cols_list)):
+                if i == j:
+                    axs[i][j].text(0.1, 0.5, cols_list[i], fontsize=11)
+                else:
+                    col1 = num_df.columns[i]
+                    col2 = num_df.columns[j]
+                    axs[i][j].scatter(num_df.loc[:,col1], num_df.loc[:,col2], marker='.')
+            
 
         for ax in axs.flat:
             ax.label_outer()
         plt.show()
-
-
