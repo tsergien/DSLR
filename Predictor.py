@@ -10,11 +10,11 @@ class Predictor:
 
     @staticmethod
     def sigmoid(z: float):
-        return 1 / (1 + np.exp(z))
+        return 1 / (1 + np.exp(-z))
 
 
     def predict(self, x: np.array):
-        return self.sigmoid(-np.dot(self.weights, x))
+        return self.sigmoid(np.dot(self.weights, x))
 
 
     def get_weights(self):

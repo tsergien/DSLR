@@ -7,10 +7,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from Predictor import Predictor
 
+# omg dont want to scale that things
+
+
 
 class LogisticRegression:
     '''Class for training data and graphing results'''
-    def __init__(self, epochs=1000, l_rate=0.001) -> None:
+    def __init__(self, epochs=100, l_rate=0.01) -> None:
         self.epochs: int = epochs
         self.l_rate: float = l_rate
         self.estimator = Predictor([0, 0, 0])
