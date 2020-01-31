@@ -18,9 +18,13 @@ class LogisticRegression:
 
     def train(self, df: pd.DataFrame, plot=False):
         np.random.seed(7171)
+        num_df = df.loc[:,['Herbology', 'Defense Against the Dark Arts', 'Hogwarts House']].dropna()
         houses_dict = {'Gryffindor': 1, 'Ravenclaw': 2, 'Slytherin': 3, 'Hufflepuff': 4}
-        x = df.loc[:,['Herbology', 'Defense Against the Dark Arts']]  
-        houses_df = df.loc[:,'Hogwarts House'].values
+        features_df = num_df.loc[:,['Herbology', 'Defense Against the Dark Arts']]
+        features_df.insert(loc=0, column='Bias', value=np.zeros(features_df.shape[0]))
+        houses_df = num_df.loc[:,'Hogwarts House'].values
+
+        x = features_df.values
         y = [houses_dict[houses_df[i]] for i in range(len(houses_df))]
 
         # if not plot:
@@ -30,7 +34,7 @@ class LogisticRegression:
         #     self.animated_training(data, df, mus, sigmas)
         
         pickle.dump(self.estimator, open('weights.sav', 'wb'))
-        print(f'Resulting loss function: {self.loss_function(data)}')
+        print(f'Resulting loss function: {self.loss_function(x, y)}')
         return        
 
 
