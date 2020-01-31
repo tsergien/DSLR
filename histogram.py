@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import sys
 
-# Which Hogwarts course has a homogeneous score distribution between all four houses
 
 if __name__ == "__main__":
     if (len(sys.argv) < 2):

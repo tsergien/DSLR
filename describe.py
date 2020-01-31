@@ -2,7 +2,6 @@
 
 import sys
 import pandas as pd
-import math
 import numpy as np
 
 
@@ -11,8 +10,6 @@ if __name__ == "__main__":
         print("Program need file with data. Please, pass it as argument.")
     else:
         df = pd.read_csv(sys.argv[1], sep=",")
-
-        print(df.describe())
 
         num_df = df.select_dtypes(include=['int', 'float64'])       
         index_list = ['count', 'mean', 'std', 'min', '25%', '50%', '75%', 'max', 'unique']
@@ -39,4 +36,3 @@ if __name__ == "__main__":
            
 
         print(describe_df)
-

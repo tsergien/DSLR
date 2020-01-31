@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import sys
 
-# scatter plot matrix
 
 if __name__ == "__main__":
     if (len(sys.argv) < 2):
@@ -24,7 +23,7 @@ if __name__ == "__main__":
         plots_amount  = len(cols_list)-1
         fig, axs = plt.subplots(plots_amount, plots_amount, figsize=(25, 15))
         fig.subplots_adjust(wspace=0.2, hspace=0.2)
-        fig.suptitle('Scatter plots ')
+        fig.suptitle('Paired scatter plots')
         
         for i in range(1, len(cols_list)):
             for j in range(1, len(cols_list)):
@@ -43,5 +42,4 @@ if __name__ == "__main__":
             ax.label_outer()
         plt.show()
 
-        print('Answer: \nAstronomy and Defence Against Dark Arts. \
-            \nHistory of Magic and Flying.')
+        print(f'Features: Defense Against the Dark Arts and Herbology.')
