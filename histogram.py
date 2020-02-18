@@ -3,6 +3,8 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import sys
+import warnings
+warnings.filterwarnings("ignore")
 
 # Which Hogwarts course has a homogeneous score distribution between all four houses
 
@@ -37,15 +39,17 @@ if __name__ == "__main__":
 
         for ax in axs.flat:
             ax.label_outer()
+        plt.legend(houses_names)
         plt.show()
 
 
-        answer = ['Care of Magical Creatures', 'Arithmancy']
-        for i in range(2):
+        answer = ['Care of Magical Creatures']
+        for i in range(len(answer)):
             for house in houses_names:
                 house_df = num_df.loc[num_df['Hogwarts House'] == house]
                 col = answer[i]
                 plt.hist(house_df.loc[:,col], \
-                    bins=30, alpha=0.3, color=houses_colors[house])
+                    bins=30, alpha=0.4, color=houses_colors[house])
             plt.title(col)
+            plt.legend(houses_names)
             plt.show()
