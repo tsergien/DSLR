@@ -6,7 +6,11 @@ import numpy as np
 
 
 def my_describe(df: pd.DataFrame):
-    num_df = df.select_dtypes(include=['int', 'float64'])       
+    '''
+    Accepts numerical DataFrame and returns new DataFrame
+    containing mean, std, percentiles, min, max(rows) for each feature(columns).  
+    '''
+    num_df = df.select_dtypes(include=['int16', 'int32', 'int64', 'float16', 'float32', 'float64'])       
     index_list = ['count', 'mean', 'std', 'min', '25%', '50%', '75%', 'max', 'unique']
     describe_df = pd.DataFrame(0, index=index_list, columns=list(num_df.columns.values)) 
     
@@ -37,7 +41,7 @@ if __name__ == "__main__":
     else:
         try:
             df = pd.read_csv(sys.argv[1], sep=",")
-            print(df.describe())
+            # print(df.describe())
             print(my_describe(df))
         except Exception as e:
             print(f'Exception: {e}')

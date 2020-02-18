@@ -24,7 +24,8 @@ class LogisticRegression:
         num_df = df.loc[:,['Herbology', 'Defense Against the Dark Arts', 'Hogwarts House']].dropna()
         houses_dict = {'Gryffindor': 1, 'Ravenclaw': 2, 'Slytherin': 3, 'Hufflepuff': 4}
         features_df = num_df.loc[:,['Herbology', 'Defense Against the Dark Arts']]
-        features_df.insert(loc=0, column='Bias', value=np.zeros(features_df.shape[0]))
+        features_df.insert( loc=0, column='Bias', value=(np.zeros(features_df.shape[0])+1) )
+        print(features_df[:5])
         houses_df = num_df.loc[:,'Hogwarts House'].values
 
         x = features_df.values

@@ -28,7 +28,7 @@ def my_scatter(num_df: pd.DataFrame, houses_colors):
                         marker='.', color=houses_colors[house], alpha=0.5)
     for ax in axs.flat:
         ax.label_outer()
-    plt.legend(houses_colors.keys())
+    plt.legend(houses_colors.keys(), loc=1, bbox_to_anchor=(1.1, 1.1, 1, 1))
     plt.show()
 
     
@@ -46,7 +46,7 @@ if __name__ == "__main__":
         'Care of Magical Creatures', 'Charms', 'Flying']
         houses_colors = {'Gryffindor':'r', 'Ravenclaw':'b', 'Slytherin':'g', 'Hufflepuff':'y'}
         num_df = df[cols_list]
-        # my_scatter(num_df, houses_colors)
+        my_scatter(num_df, houses_colors)
         
         for house in houses_colors.keys():
             house_df = num_df.loc[num_df['Hogwarts House'] == house]
