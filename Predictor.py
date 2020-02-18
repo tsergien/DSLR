@@ -25,8 +25,3 @@ class Predictor:
         self.weights = self.weights - updates
 
 
-    def set_scaling_parameters(self, mus, sigmas):
-        return
-
-    def get_scaling_parameters(self):
-        return
