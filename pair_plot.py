@@ -21,6 +21,11 @@ def my_pair_plot(num_df: pd.DataFrame, houses_colors):
           'weight' : 'light',
           'size'   : 6}
     matplotlib.rc('font', **font)
+    my_fontdict = {'fontsize': 6,
+        'fontweight' : matplotlib.rcParams['axes.titleweight'],
+        'verticalalignment': 'baseline',
+        'horizontalalignment': loc}
+
     for i in range(1, len(num_df.columns)):
         for j in range(1, len(num_df.columns)):
             for house in houses_colors.keys():
@@ -35,10 +40,10 @@ def my_pair_plot(num_df: pd.DataFrame, houses_colors):
                         marker='.', color=houses_colors[house], alpha=0.5)
                 
             if axs[i-1][j-1].is_last_row():
-                axs[i-1, j-1].set_xlabel(col_y.replace(' ', '\n'))
+                axs[i-1, j-1].set_xlabel(col_y.replace(' ', '\n'), fontdict=my_fontdict)
                 axs[i-1, j-1].tick_params(labelbottom=False)
             if axs[i-1][j-1].is_first_col():
-                axs[i-1, j-1].set_ylabel(col_x.replace(' ', '\n'))
+                axs[i-1, j-1].set_ylabel(col_x.replace(' ', '\n'), fontdict=my_fontdict)
                 axs[i-1, j-1].tick_params(labelleft=False)
             axs[i-1, j-1].spines['right'].set_visible(False)
             axs[i-1, j-1].spines['top'].set_visible(False)
