@@ -6,7 +6,6 @@ import sys
 import warnings
 warnings.filterwarnings("ignore")
 
-# Which Hogwarts course has a homogeneous score distribution between all four houses
 
 if __name__ == "__main__":
     if (len(sys.argv) < 2):
