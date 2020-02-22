@@ -4,7 +4,7 @@ import numpy as np
 import pickle
 import pandas as pd
 import matplotlib.pyplot as plt
-from Predictor import Predictor
+from Predictor import Predictor, PredictorMultiClass
 
 
 np.random.seed(777)
@@ -24,7 +24,7 @@ class LogisticRegression:
         features_df = num_df.loc[:,['Herbology', 'Defense Against the Dark Arts']]
         features_df.insert( loc=0, column='Bias', value=(np.zeros(features_df.shape[0])+1) )
         houses_df = num_df.loc[:,'Hogwarts House'].values
-   
+
 
         x = features_df.values
         yG = [houses_df[i] == 'Gryffindor' for i in range(len(houses_df))]
@@ -32,17 +32,15 @@ class LogisticRegression:
         yS = [houses_df[i] == 'Slytherin' for i in range(len(houses_df))]
         yH = [houses_df[i] == 'Hufflepuff' for i in range(len(houses_df))]
 
-        # if not plot:
         i = 0
         for y in [yG, yR, yS, yH]:
-            for epoch in range(self.epochs):
+            for _ in range(self.epochs):
                 self.est[i].weights_update(self.derivative(x, y, i))
-        # else: 
-        #     self.animated_training(data, df, mus, sigmas)
             filename = 'weights' + str(i) + '.sav'
             pickle.dump(self.est[i], open(filename, 'wb'))
             print(f'Resulting loss function: {self.loss_function(x, y, i)}')
             i = i + 1
+        self.save_model()
         return
 
 
@@ -60,6 +58,12 @@ class LogisticRegression:
         return updates
 
 
+    def save_model(self, filename='weights'):
+        w = np.zeros(4, 3)
+        for i in range(len(self.est)):
+            w[i] = self.est[i].get_weights()
+        mult_class = PredictorMultiClass(w)
+        pickle.dump(mult_class, open(filename, 'w'))
 
 
     # def graph(self, xg, yg, dots: np.ndarray):
