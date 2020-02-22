@@ -2,3 +2,5 @@
 **/my_env
 subject.pdf
 *.sav
+**/.vscode
+python3_test.py

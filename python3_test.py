@@ -1,13 +1,8 @@
 #!/usr/bin/env python3
 
 import numpy as np
+import pandas as  pd
 
-w = np.zeros((3, 2))
-w2 = np.zeros(3)
 
-print(type(w))
-print(type(w2))
-
-print(len(w.shape))
-print(len(w2.shape))
-
+df = pd.read_csv('resources/dataset_train.csv', sep=",")
+print(df.head())

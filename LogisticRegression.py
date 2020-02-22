@@ -9,7 +9,7 @@ from Predictor import Predictor, PredictorMultiClass
 
 class LogisticRegression:
     '''Class for training data and graphing results'''
-    def __init__(self, epochs=50, l_rate=0.1) -> None:
+    def __init__(self, epochs=100, l_rate=0.1) -> None:
         self.epochs: int = epochs
         self.l_rate: float = l_rate
         self.est = [Predictor([np.random.random() for j in range(3)]) for i in range(4)]
@@ -26,14 +26,10 @@ class LogisticRegression:
         yR = [float(houses_df[i] == 'Ravenclaw') for i in range(len(houses_df))]
         yS = [float(houses_df[i] == 'Slytherin') for i in range(len(houses_df))]
         yH = [float(houses_df[i] == 'Hufflepuff') for i in range(len(houses_df))]
-
-
-        i = 0
-        for y in [yG, yR, yS, yH]:
-            for _ in range(self.epochs):
-                self.est[i].weights_update(self.derivative(x, y, self.est[i]))
-            print(f'Resulting loss function: {self.loss_function(x, y, self.est[i])}')
-            i = i + 1
+        print(f'G = {sum(yG)}, R = {sum(yR)}, S = {sum(yS)}, H = {sum(yH)}')
+        # self.miniBatch(x, [yG, yR, yS, yH], 512)
+        self.GD(x, [yG, yR, yS, yH])
+        # self.SGD(x, [yG, yR, yS, yH])
         self.save_model()
         return
 
@@ -41,6 +37,34 @@ class LogisticRegression:
     def loss_function(self, x: np.ndarray, y: np.array, est: Predictor):
         m = len(y)
         return -sum([y[i] * np.log(est.predict(x[i])) + (1 - y[i]) * np.log(est.predict(x[i])) for i in range(m)]) / m
+
+
+    def GD(self, x: np.ndarray, ys: np.ndarray):
+        for i in range(len(ys)):
+            y = ys[i]
+            for _ in range(self.epochs): 
+                self.est[i].weights_update(self.derivative(x, y, self.est[i]))
+            print(f'Resulting loss function: {self.loss_function(x, y, self.est[i])}')        
+            
+    
+    def miniBatch(self, x: np.ndarray, ys: np.ndarray, batch_size: int):
+        batch_count = int(len(x) / batch_size)
+        for i in range(len(ys)):
+            y = ys[i]
+            for _ in range(self.epochs):
+                for  batch_i in range(batch_count):
+                    if batch_i < batch_count-1:
+                        batch_x = x[batch_i * batch_size:(batch_i+1)*batch_size]
+                        batch_y = y[batch_i * batch_size:(batch_i+1)*batch_size]
+                    else:
+                        batch_x = x[batch_i * batch_size:]
+                        batch_y = y[batch_i * batch_size:]
+                    self.est[i].weights_update(self.derivative(batch_x, batch_y, self.est[i]))
+            print(f'Resulting loss function: {self.loss_function(x, y, self.est[i])}')
+
+
+    def SGD(self, x: np.ndarray, ys: np.ndarray):
+        self.miniBatch(x, ys, 1)
 
 
     def derivative(self, x: np.ndarray, y: np.array, est: Predictor):
