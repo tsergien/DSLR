@@ -7,12 +7,15 @@ import matplotlib.pyplot as plt
 from Predictor import Predictor
 
 
+np.random.seed(777)
+
 class LogisticRegression:
     '''Class for training data and graphing results'''
-    def __init__(self, epochs=50, l_rate=0.1) -> None:
+    def __init__(self, epochs=5, l_rate=0.1) -> None:
         self.epochs: int = epochs
         self.l_rate: float = l_rate
-        self.est = Predictor([0, 0, 0])
+        self.est = [Predictor([np.random.random() for j in range(3)]) for i in range(4)]
+
 
 
     def train(self, df: pd.DataFrame, plot=False):
@@ -32,34 +35,31 @@ class LogisticRegression:
         # if not plot:
         i = 0
         for y in [yG, yR, yS, yH]:
-            i = i + 1
             for epoch in range(self.epochs):
-                self.run_epoch(x, y)
+                self.est[i].weights_update(self.derivative(x, y, i))
         # else: 
         #     self.animated_training(data, df, mus, sigmas)
             filename = 'weights' + str(i) + '.sav'
-            pickle.dump(self.est, open(filename, 'wb'))
-            print(f'Resulting loss function: {self.loss_function(x, y)}')
-        return        
+            pickle.dump(self.est[i], open(filename, 'wb'))
+            print(f'Resulting loss function: {self.loss_function(x, y, i)}')
+            i = i + 1
+        return
 
 
-    def loss_function(self, x: np.ndarray, y: np.array):
+    def loss_function(self, x: np.ndarray, y: np.array, est_i):
         m = len(y)
-        return -sum([y[i] * np.log(self.est.predict(x[i])) + (1 - y[i]) * np.log(self.est.predict(x[i])) for i in range(m)]) / m
+        return -sum([y[i] * np.log(self.est[est_i].predict(x[i])) + (1 - y[i]) * np.log(self.est[est_i].predict(x[i])) for i in range(m)]) / m
 
 
-    def derivative(self, x: np.ndarray, y: np.array):
+    def derivative(self, x: np.ndarray, y: np.array, est_i):
         '''returns gradient (vector)'''
         m = len(y)
         updates = np.array([0, 0, 0])
         for j in range(len(updates)):
-            updates[j] = self.l_rate * sum([(self.est.predict(x[i]) - y[i])*x[i][j] for i in range(m)]) / m
+            updates[j] = self.l_rate * sum([(self.est[est_i].predict(x[i]) - y[i])*x[i][j] for i in range(m)]) / m
         return updates
 
 
-    def run_epoch(self, x: np.ndarray, y: np.array):
-        self.est.weights_update(self.derivative(x, y))
-        return
 
 
     # def graph(self, xg, yg, dots: np.ndarray):
