@@ -20,7 +20,7 @@ def my_scatter(num_df: pd.DataFrame, houses_colors):
             for house in houses_colors.keys():
                 house_df = num_df.loc[num_df['Hogwarts House'] == house]
                 if i == j:
-                    axs[i-1][j-1].text(0.1, 0.5, num_df.columns[i], fontsize=11)
+                    axs[i-1][j-1].text(0.1, 0.1, num_df.columns[i].replace(' ', '\n'), fontsize=9)
                 else:
                     col1 = house_df.columns[i]
                     col2 = house_df.columns[j]
