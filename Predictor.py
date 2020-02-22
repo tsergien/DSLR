@@ -5,9 +5,9 @@ import numpy as np
 
 class Predictor:
     def __init__(self, weights) -> None:
-        self.weights = weights
+        self.weights = np.array(weights)
         if weights == None:
-            self.weights = [np.random.random() for j in range(3)]
+            self.weights = np.array([np.random.random() for j in range(3)])
 
 
     @staticmethod
@@ -16,10 +16,8 @@ class Predictor:
 
 
     def predict(self, x: np.array):
-        # r= int(self.sigmoid(np.dot(self.weights, x)) > 0.5)
-        r= self.sigmoid(np.dot(self.weights, x))
-        # print(f'predict: {r}')
-        return r
+        return self.sigmoid(np.dot(self.weights, x))
+        # return float(self.sigmoid(np.dot(self.weights, x)) > 0.5)
     
     
     def get_weights(self):
@@ -53,7 +51,7 @@ class PredictorMultiClass:
         Returns 1/2.../k if multi class regression.
         '''
         if self.k == 1:
-            return self.sigmoid(np.dot(self.weights[0], x)) > 0.5
+            return self.sigmoid(np.dot(self.weights[0], x_)) > 0.5
         else:
             probabilities = np.zeros(self.k)
             for i in range(len(probabilities)):
