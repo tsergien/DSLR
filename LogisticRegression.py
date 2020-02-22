@@ -48,9 +48,7 @@ class LogisticRegression:
         m = len(y)
         updates = np.array([0, 0, 0], dtype=float)
         for j in range(len(updates)):
-            print(f'diff: {est.predict(x[1]) - y[1]}')
             updates[j] = self.l_rate * sum([(est.predict(x[i]) - y[i])*x[i][j] for i in range(m)]) / m
-        print(f'updates : {updates}')
         return updates
 
 
@@ -58,47 +56,7 @@ class LogisticRegression:
         w = np.zeros((4, 3))
         for i in range(len(self.est)):
             w[i] = self.est[i].get_weights()
-        mult_class = PredictorMultiClass(w)
+        mult_class = PredictorMultiClass(w, 4)
         pickle.dump(mult_class, open(filename, 'wb'))
-
-
-    # def graph(self, xg, yg, dots: np.ndarray):
-    #     '''Visualizing scattered dots'''
-    #     plt.plot(xg, yg)
-    #     plt.xlabel('mileage')
-    #     plt.ylabel('estimated price')
-    #     plt.xlim(xg.min()-1, xg.max()+1)
-    #     plt.scatter(dots[:,0], dots[:, 1], marker='x')
-    #     plt.title(title)
-    #     plt.show()
-    #     return
-
-
-    # def animated_training(self, data: np.ndarray, df: pd.DataFrame, mus, sigmas):
-    #     fig, ax = plt.subplots(figsize=(16, 9), dpi=70)
-    #     def animate(epoch: int):
-    #         self.run_epoch(data)
-    #         ax.clear()
-    #         plt.title(f'epoch = {epoch}')
-    #         ax.set_xlabel('km')
-    #         ax.set_ylabel('price')
-    #         ax.set_xlim(data.min(axis=0)[0]-1, data.max(axis=0)[0]+1)
-    #         ax.set_ylim(-4, 4)
-    #         x = np.linspace(start=data.min(axis=0)[0]-1, stop=data.max(axis=0)[0]+1, num=100)
-    #         y = self.est.predict(x)
-    #         line = plt.plot(x, y, label='prediction')
-    #         plt.scatter(data[:,0], data[:, 1], label='raw data', marker='x')
-    #         plt.legend()
-    #         return line,
-    #     ani = animation.FuncAnimation(fig, animate, frames=self.epochs, interval=10, blit=False)
-    #     plt.show()
-    #     for epoch in range(self.epochs):
-    #         self.run_epoch(data)
-    #     scaled_x = np.linspace(start=data.min(axis=0)[0]-1, stop=data.max(axis=0)[0]+1, num=100)
-    #     self.graph(scaled_x, self.est.predict(scaled_x), data, 'k', f'Scaled data ({self.epochs})')
-    #     x_lin = np.linspace(start=df.min(axis=0)[0]-1, stop=df.max(axis=0)[0]+1, num=100)
-    #     y_lin = self.est.predict(scaled_x) * sigmas[1] + mus[1]
-    #     self.graph(x_lin, y_lin, (np.matrix([df.km, df.price]).T).A, 'b', 'Resulting unscaled prediction')
-    #     return
 
 

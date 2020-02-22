@@ -17,7 +17,6 @@ class Predictor:
 
     def predict(self, x: np.array):
         return self.sigmoid(np.dot(self.weights, x))
-        # return float(self.sigmoid(np.dot(self.weights, x)) > 0.5)
     
     
     def get_weights(self):
@@ -38,6 +37,8 @@ class PredictorMultiClass:
         '''
         self.k = k
         self.weights = weights
+        # if all(weights) and len(weights.shape) > 1:
+        #     self.k = weights.shape[0]
 
 
     @staticmethod
@@ -51,12 +52,12 @@ class PredictorMultiClass:
         Returns 1/2.../k if multi class regression.
         '''
         if self.k == 1:
-            return self.sigmoid(np.dot(self.weights[0], x_)) > 0.5
+            return int(self.sigmoid(np.dot(self.weights[0], x)) > 0.5)
         else:
-            probabilities = np.zeros(self.k)
+            probabilities = np.zeros(self.k, dtype=float)
             for i in range(len(probabilities)):
                 probabilities[i] = self.sigmoid(np.dot(self.weights[i], x))
-            return np.argmax(probabilities)
+            return np.argmax(probabilities)+1
 
 
     def get_weights(self):
