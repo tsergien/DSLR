@@ -15,7 +15,14 @@ class LogisticRegression:
         self.est = [Predictor([np.random.random() for j in range(3)]) for i in range(4)]
 
 
-    def train(self, df: pd.DataFrame, plot=False):
+    def train(self, df: pd.DataFrame, optim='GD'):
+        '''
+        Train model with incoming weights and save weights to file.
+        
+        Parameters:
+        df: DataFrame with features and correct predictions
+        optim: string ['GD', 'SGD', 'miniBatch'] - optimization algorithm
+        '''
         num_df = df.loc[:,['Herbology', 'Defense Against the Dark Arts', 'Hogwarts House']].dropna()
         features_df = num_df.loc[:,['Herbology', 'Defense Against the Dark Arts']]
         features_df.insert( loc=0, column='Bias', value=(np.zeros(features_df.shape[0])+1) )
@@ -26,10 +33,13 @@ class LogisticRegression:
         yR = [float(houses_df[i] == 'Ravenclaw') for i in range(len(houses_df))]
         yS = [float(houses_df[i] == 'Slytherin') for i in range(len(houses_df))]
         yH = [float(houses_df[i] == 'Hufflepuff') for i in range(len(houses_df))]
-        print(f'G = {sum(yG)}, R = {sum(yR)}, S = {sum(yS)}, H = {sum(yH)}')
-        # self.miniBatch(x, [yG, yR, yS, yH], 512)
-        self.GD(x, [yG, yR, yS, yH])
-        # self.SGD(x, [yG, yR, yS, yH])
+
+        if optim == 'miniBatch':
+            self.miniBatch(x, [yG, yR, yS, yH], 132)
+        elif optim == 'SGD':
+            self.SGD(x, [yG, yR, yS, yH])
+        else:
+            self.GD(x, [yG, yR, yS, yH])
         self.save_model()
         return
 
