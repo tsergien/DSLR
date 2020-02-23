@@ -15,7 +15,7 @@ if __name__ == "__main__":
         df = pd.read_csv(sys.argv[1], sep=",")
         
         regressor = LogisticRegression()
-        regressor.train(df)
+        regressor.train(df, 'GD', plot=True)
     
 
     

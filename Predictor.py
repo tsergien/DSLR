@@ -4,10 +4,19 @@ import numpy as np
 
 
 class Predictor:
-    def __init__(self, weights) -> None:
+    def __init__(self, weights, epochs=50, lr=0.01) -> None:
         self.weights = np.array(weights)
-        if weights == None:
-            self.weights = np.array([np.random.random() for j in range(3)])
+        self._epochs = epochs
+        self.lrate = lr
+
+
+
+    def lr(self):
+        return self.lrate
+    
+    
+    def epochs(self):
+        return self._epochs
 
 
     @staticmethod
@@ -57,7 +66,7 @@ class PredictorMultiClass:
             probabilities = np.zeros(self.k, dtype=float)
             for i in range(len(probabilities)):
                 probabilities[i] = self.sigmoid(np.dot(self.weights[i], x))
-            return np.argmax(probabilities)+1
+            return np.argmax(probabilities) + 1
 
 
     def get_weights(self):
