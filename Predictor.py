@@ -21,7 +21,7 @@ class Predictor:
 
     @staticmethod
     def sigmoid(z: float):
-        return 1 / (1 + np.exp(-z))
+        return 1.0 / (1 + np.exp(-z))
 
 
     def predict(self, x: np.array):
@@ -38,16 +38,15 @@ class Predictor:
 
 
 class PredictorMultiClass:
-    def __init__(self, weights: np.ndarray, k=1) -> None:
+    def __init__(self, weights: np.ndarray, classes=1, dim=4) -> None:
         '''
         params: 
             k - number of classes
             weights: matrix, each row is weights for a class
         '''
-        self.k = k
+        self.k = classes
+        self.dim = dim
         self.weights = weights
-        # if all(weights) and len(weights.shape) > 1:
-        #     self.k = weights.shape[0]
 
 
     @staticmethod
@@ -74,10 +73,10 @@ class PredictorMultiClass:
 
   
     def set_weights(self, weights):
-        if weights.shape[0] == self.k and weights.shape[1] == 3:
+        if weights.shape[0] == self.k and weights.shape[1] == self.dim:
             self.weights = weights
         else:
-            self.weights = np.zeros((self.k, 3))
+            self.weights = np.zeros((self.k, self.dim))
 
     def weights_update(self, updates: np.array) -> None:
         self.weights = self.weights - updates

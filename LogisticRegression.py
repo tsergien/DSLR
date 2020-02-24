@@ -5,22 +5,19 @@ import pickle
 import pandas as pd
 import matplotlib.pyplot as plt
 from Predictor import Predictor, PredictorMultiClass
-
+from forming_data import form_data
 
 class LogisticRegression:
     '''Class for training data and graphing results'''
-    def __init__(self, epochs=50, l_rate=0.001) -> None:
-        self.epochs: int = epochs
-        self.l_rate: float = l_rate
-        # self.est = [Predictor([np.random.random() for j in range(3)]) for i in range(4)]
+    def __init__(self) -> None:
+        self.dim = 3
         self.est = [\
-                    Predictor(np.random.normal(0, 0.5, 3), 5, 0.1),\
-                    Predictor(np.random.normal(0, 0.5, 3), 10, 0.01),\
-                    Predictor(np.random.normal(0, 0.5, 3), 9, 0.1),\
-                    Predictor(np.random.normal(0, 0.5, 3), 5, 0.1) ]
-        self.plot = False
+                    Predictor(np.random.normal(0, 0.5, self.dim), 100, 0.001),\
+                    Predictor(np.random.normal(0, 0.5, self.dim), 100, 0.001),\
+                    Predictor(np.random.normal(0, 0.5, self.dim), 80, 0.01),\
+                    Predictor(np.random.normal(0, 0.5, self.dim), 50, 0.01) ]
         self.houses_dict = {1 : 'Gryffindor', 2 : 'Ravenclaw', 3 : 'Slytherin', 4 : 'Hufflepuff'}
-        
+
 
     def train(self, df: pd.DataFrame, optim='GD', plot=False):
         '''
@@ -31,17 +28,10 @@ class LogisticRegression:
         optim: string ['GD', 'SGD', 'miniBatch'] - optimization algorithm
         '''
         self.plot = plot
-        num_df = df.loc[:,['Herbology', 'Defense Against the Dark Arts', 'Hogwarts House']].dropna()
-        features_df = num_df.loc[:,['Herbology', 'Defense Against the Dark Arts']]
-        features_df.insert( loc=0, column='Bias', value=(np.zeros(features_df.shape[0])+1) )
-        houses_df = num_df.loc[:,'Hogwarts House'].values
 
-        x = features_df.values
-        yG = [float(houses_df[i] == 'Gryffindor') for i in range(len(houses_df))]
-        yR = [float(houses_df[i] == 'Ravenclaw') for i in range(len(houses_df))]
-        yS = [float(houses_df[i] == 'Slytherin') for i in range(len(houses_df))]
-        yH = [float(houses_df[i] == 'Hufflepuff') for i in range(len(houses_df))]
-
+        # x, yG, yR, yS, yH = form_data(df, ['Herbology', 'Defense Against the Dark Arts', 'Ancient Runes'])
+        x, yG, yR, yS, yH = form_data(df, ['Herbology', 'Defense Against the Dark Arts'])
+         
         if optim == 'miniBatch':
             self.miniBatch(x, [yG, yR, yS, yH], 132)
         elif optim == 'SGD':
@@ -107,7 +97,7 @@ class LogisticRegression:
     def derivative(self, x: np.ndarray, y: np.array, est: Predictor):
         '''returns gradient (vector)'''
         m = len(y)
-        updates = np.array([0, 0, 0], dtype=float)
+        updates = np.zeros(self.dim, dtype=float)
         for j in range(len(updates)):
             updates[j] = est.lr() * sum([(est.predict(x[i]) - y[i])*x[i][j] for i in range(m)]) / m
         return updates
@@ -124,10 +114,10 @@ class LogisticRegression:
 
 
     def save_model(self, filename='weights.sav'):
-        w = np.zeros((4, 3))
+        w = np.zeros((4, self.dim))
         for i in range(len(self.est)):
             w[i] = self.est[i].get_weights()
-        mult_class = PredictorMultiClass(w, 4)
+        mult_class = PredictorMultiClass(w, 4, 4)
         pickle.dump(mult_class, open(filename, 'wb'))
 
 

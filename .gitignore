@@ -4,3 +4,4 @@ subject.pdf
 *.sav
 **/.vscode
 python3_test.py
+**/accuracy_scikit.py
