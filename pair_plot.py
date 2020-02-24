@@ -13,7 +13,7 @@ def my_pair_plot(num_df: pd.DataFrame, houses_colors):
     Accepts DataFrame with numerical features and draws pair plot
     '''
     plots_amount  = num_df.shape[1] - 1
-    fig, axs = plt.subplots(plots_amount, plots_amount, figsize=(20, 20))
+    fig, axs = plt.subplots(plots_amount, plots_amount, figsize=(20, 13))
     fig.subplots_adjust(wspace=0.2, hspace=0.4)
     fig.suptitle('Scatter plots ')
 
